@@ -1,0 +1,48 @@
+#container {
+    height: 500px; 
+    min-width: 310px; 
+    max-width: 800px; 
+    margin: 0 auto; 
+  }
+  .loading {
+    margin-top: 10em;
+    text-align: center;
+    color: gray;
+  } 
+.upperimages{display: inline-block; width: 90%; text-align: center;}
+
+#symbol{height: 70px;width: 10%;}
+
+h1,h2,h3{font-family: 'Montserrat', sans-serif;}
+
+#st1{color: blue;font-size: 20px;}
+#st2{color: blue;font-size: 20px;}
+#st3{color: green;font-size: 20px;}
+#st4{color: blue;font-size: 20px;}
+
+
+.sub > div {
+    display: inline-block;
+    display: -moz-inline-box;
+    *display: inline; 
+    zoom: 1;
+    width: 33%;
+    text-align: center;
+}
+
+
+#block_container {
+    text-align: center;
+}
+#block_container > div {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+
+.main{font-family:'Montserrat', sans-serif;}
+
+text.highcharts-credits {
+  display: none;
+}
+

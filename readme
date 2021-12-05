@@ -1,0 +1,9 @@
+To launch the webpaage on localhost:
+
+1. Make sure you have python3 installed
+2. Download the code to your local environment
+3. Open terminal and cd to the directory of the code
+4. Type the following command on terminal and press enter:
+python3 -m http.server --cgi 8080
+5. Open your browser and visit the following link: 
+http://localhost:8080/

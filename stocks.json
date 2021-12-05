@@ -1,0 +1,38 @@
+[{"Date":1449619200000,"Adj Close":28.0,"Stock":1},
+    {"Date":1449705600000,"Adj Close":100,"Stock":1},
+    {"Date":1449792000000,"Adj Close":23.5,"Stock":1},
+    {"Date":1450051200000,"Adj Close":22.2600002289,"Stock":1},
+    {"Date":1450137600000,"Adj Close":19.5,"Stock":1},
+    {"Date":1450224000000,"Adj Close":26.5400009155,"Stock":1},
+    
+
+    {"Date":1449619200000,"Adj Close":17.0,"Stock":2},
+    {"Date":1449705600000,"Adj Close":27.7800006866,"Stock":2},
+    {"Date":1449792000000,"Adj Close":27.5,"Stock":2},
+    {"Date":1450051200000,"Adj Close":40.2600002289,"Stock":2},
+    {"Date":1450137600000,"Adj Close":26.5,"Stock":2},
+    {"Date":1450224000000,"Adj Close":100,"Stock":2},
+
+
+    {"Date":1449619200000,"Adj Close":21.0,"Stock":3},
+    {"Date":1449705600000,"Adj Close":27.7800006866,"Stock":3},
+    {"Date":1449792000000,"Adj Close":27.5,"Stock":3},
+    {"Date":1450051200000,"Adj Close":26.2600002289,"Stock":3},
+    {"Date":1450137600000,"Adj Close":26.5,"Stock":3},
+    {"Date":1450224000000,"Adj Close":26.5400009155,"Stock":3},
+
+    {"Date":1449619200000,"Adj Close":17.0,"Stock":4},
+    {"Date":1449705600000,"Adj Close":30.7800006866,"Stock":4},
+    {"Date":1449792000000,"Adj Close":27.5,"Stock":4},
+    {"Date":1450051200000,"Adj Close":26.2600002289,"Stock":4},
+    {"Date":1450137600000,"Adj Close":100,"Stock":4},
+    {"Date":1450224000000,"Adj Close":23.5400009155,"Stock":4},
+
+    {"Date":1449619200000,"Adj Close":8.0,"Stock":5},
+    {"Date":1449705600000,"Adj Close":40.7800006866,"Stock":5},
+    {"Date":1449792000000,"Adj Close":27.5,"Stock":5},
+    {"Date":1450051200000,"Adj Close":38.2600002289,"Stock":5},
+    {"Date":1450137600000,"Adj Close":26.5,"Stock":5},
+    {"Date":1450224000000,"Adj Close":9.5400009155,"Stock":5}
+
+]

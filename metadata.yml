@@ -1,0 +1,12 @@
+---
+:id: 30523566
+:submitters:
+- :name: Tiange Wan
+  :email: t2wan@ucsd.edu
+:created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2020-02-26 04:55:06.802231000 Z
+  zone: !ruby/object:ActiveSupport::TimeZone
+    name: America/Los_Angeles
+  time: 2020-02-25 20:55:06.802231000 Z
+:status: processed
+:score: 12.0
