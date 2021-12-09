@@ -128,16 +128,16 @@ document.addEventListener('DOMContentLoaded', function () {
 		  name: 'Brands',
 		  colorByPoint: true,
 		  data: [{
-			name: 'First',
+			name: 'top-1-model',
 			y: 0.33,
 			sliced: true,
 		  }, {
-			name: 'Second',
+			name: 'top-2-model',
 			y: 0.33,
 			sliced: true,
 		  },
 		  {
-			name: 'Third',
+			name: 'top-3-model',
 			y: 0.33,
 			sliced: true,
 			color: '#FFEC00',
