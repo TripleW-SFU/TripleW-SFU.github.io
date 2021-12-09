@@ -311,10 +311,10 @@ document.addEventListener('DOMContentLoaded', function () {
 		  zoomType: 'x'
 		},
 		title: {
-		  text: 'Dynamic Growth'
+		  text: 'Dynamic Growth for ' + stock
 		},
 		subtitle: {
-		  text: 'Stock Prices Predictions of ' + stock
+		  text: 'Actual Stock Prices vs Predicted Stock Prices'
 		},
 		xAxis: {
 				categories: container[stock][0]
