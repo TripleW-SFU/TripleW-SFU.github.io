@@ -14,18 +14,20 @@ document.addEventListener('DOMContentLoaded', function () {
 			type: 'column'
 		},
 		title: {
-			text: 'Monthly Sales'
+			text: 'Earning Evaluation'
 		},
 		xAxis: {
-			categories: [1,2,3],
+			categories: 
+				["top3-stock", "top2-stock", "top1-stock",'All']
+			,
 			title: {
-				text: 'Month'
+				text: 'Stocks'
 			}
 		},
 		yAxis: {
 			min: 0,
 			title: {
-				text: 'Number of units sold'
+				text: 'Earning in dollars per share'
 			},
 			lineWidth: 1,
 		},
@@ -53,12 +55,12 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 		},
 		series: [{
-			name: 'Dinguses',
-			data: [1,2,3],
+			name: 'Random selected',
+			data: [1,2,3,6],
 			color: '#00A2D1'
 		}, {
-			name: 'Widgets',
-			data: [4,5,6],
+			name: 'Model selected',
+			data: [1,2,4,7],
 			color: '#E40001'
 		}
 	]
@@ -73,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		  type: 'pie'
 		},
 		title: {
-		  text: 'Total Sales'
+		  text: 'Portfolio Recommendation'
 		},
 		tooltip: {
 				formatter: function(){
@@ -126,13 +128,19 @@ document.addEventListener('DOMContentLoaded', function () {
 		  name: 'Brands',
 		  colorByPoint: true,
 		  data: [{
-			name: 'Dingus',
-			y: 5
-		  }, {
-			name: 'Widget',
-			y: 10,
+			name: 'First',
+			y: 0.33,
 			sliced: true,
-			selected: true
+		  }, {
+			name: 'Second',
+			y: 0.33,
+			sliced: true,
+		  },
+		  {
+			name: 'Third',
+			y: 0.33,
+			sliced: true,
+			color: '#FFEC00',
 		  }]
 		}]
 	  })
