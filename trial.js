@@ -1,13 +1,75 @@
-const DINGUS_PRICE = 14.25;
-const WIDGET_PRICE = 9.99;
-
-var requester = new XMLHttpRequest();
-requester.open("GET", "sales.json", false);
-requester.send(null)
-var sales = JSON.parse(requester.responseText);
+//Create array for each stock
+const stocks = ['AAPL','AMGN','APA','BBY','CNC','IPGP','KIM','MMC','NCLH','TFX']
 
 
+//Read json files and load all info in container
+var container = {}
+for (let i=0;i<stocks.length;i++){
+	var dates = []
+	var actual = []
+	var predicted = []
+	var request = new XMLHttpRequest();
+	request.open("GET", stocks[i].concat(".json"), false);
+	request.send(null)
+	var my_JSON_object = JSON.parse(request.responseText);
+	index = ["0","1","2","3","4"]
+	for (let j=0;j<index.length;j++){
+		dates.push(my_JSON_object['Date'][j])
+		actual.push(my_JSON_object['Adj Close'][j])
+		predicted.push(my_JSON_object['Predicted Close'][j])}
+	var actual_earning = actual[actual.length-1]-actual[0]
+	var predicted_earning = predicted[predicted.length-1]-predicted[0]
+	container[stocks[i]] = [dates,actual,predicted,actual_earning,predicted_earning]
+}
+
+
+//Random select three stocks
+ function getRandomSubarray(arr, size) {
+    var shuffled = arr.slice(0), i = arr.length, temp, index;
+    while (i--) {
+        index = Math.floor((i + 1) * Math.random());
+        temp = shuffled[index];
+        shuffled[index] = shuffled[i];
+        shuffled[i] = temp;
+    }
+    return shuffled.slice(0, size);
+}
+var random_selected = getRandomSubarray(stocks, 3);
+
+//Find best performance stocks(highest predicted earnings)
+function sortByPredict(a, b) {
+    return b[1]-a[1];
+}
+var temp = []
+for (let i=0;i<stocks.length;i++){
+	temp.push([stocks[i],container[stocks[i]][4]])
+}
+temp.sort(sortByPredict);
+var model_selected = [temp[0][0],temp[1][0],temp[2][0]]
+
+
+//Plot bar and pie
 document.addEventListener('DOMContentLoaded', function () {
+	var random_data = []
+	for (let i=0;i<random_selected.length;i++){
+
+		random_data.push(container[random_selected[i]][3])
+	}
+	var model_data = []
+	for (let i=0;i<model_selected.length;i++){
+		
+		model_data.push(container[model_selected[i]][3])
+	}
+
+function add(accumulator, a) {
+  return accumulator + a;
+}
+
+const random_sum = random_data.reduce(add, 0);
+const model_sum = model_data.reduce(add, 0);
+
+
+
 	Highcharts.chart('container1', {
 		exporting: { enabled: false },
 		chart: {
@@ -18,14 +80,13 @@ document.addEventListener('DOMContentLoaded', function () {
 		},
 		xAxis: {
 			categories: 
-				["top3-stock", "top2-stock", "top1-stock",'All']
+				["top3-stock", "top2-stock", "top1-stock",'Total']
 			,
 			title: {
 				text: 'Stocks'
 			}
 		},
 		yAxis: {
-			min: 0,
 			title: {
 				text: 'Earning in dollars per share'
 			},
@@ -56,11 +117,11 @@ document.addEventListener('DOMContentLoaded', function () {
 		},
 		series: [{
 			name: 'Random selected',
-			data: [1,2,3,6],
+			data: (random_data.sort(function(a,b){return a - b})).concat([random_sum]),
 			color: '#00A2D1'
 		}, {
 			name: 'Model selected',
-			data: [1,2,4,7],
+			data: (model_data.sort(function(a,b){return a - b})).concat([model_sum]),
 			color: '#E40001'
 		}
 	]
@@ -128,16 +189,16 @@ document.addEventListener('DOMContentLoaded', function () {
 		  name: 'Brands',
 		  colorByPoint: true,
 		  data: [{
-			name: 'top-1-model',
+			name: model_selected[0],
 			y: 0.33,
 			sliced: true,
 		  }, {
-			name: 'top-2-model',
+			name: model_selected[1],
 			y: 0.33,
 			sliced: true,
 		  },
 		  {
-			name: 'top-3-model',
+			name: model_selected[2],
 			y: 0.33,
 			sliced: true,
 			color: '#FFEC00',
@@ -152,280 +213,27 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-function plotColumn(continent){
-	let dingusValues = []
-	let widgetValues = []
-	let monthValues =  []
-	
-	for (const datum of sales[continent]) {
-		let month = datum['Month'];
-		let dingus = datum['Dingus'];
-		let widget = datum['Widget'];
-		monthValues.push(month);
-		dingusValues.push( dingus);
-		widgetValues.push( widget);
-	}
-
-	Highcharts.chart('container1', {
-		exporting: { enabled: false },
-		chart: {
-			type: 'column'
-		},
-		title: {
-			text: 'Monthly Sales'
-		},
-		xAxis: {
-			categories: monthValues,
-			title: {
-				text: 'Month'
-			}
-		},
-		yAxis: {
-			min: 0,
-			title: {
-				text: 'Number of units sold'
-			},
-			lineWidth: 1,
-		},
-		tooltip: {
-			formatter: function(){
-				var ans = this.point.y
-				return ans
-			}
-		  },
-		legend: {
-			layout: 'vertical',
-			align: 'right',
-			verticalAlign: 'top',
-			x: -40,
-			y: 0,
-			floating: true,
-			borderWidth: 1,
-			backgroundColor:
-				Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
-			shadow: true
-		},
-		plotOptions: {
-			series: {
-				grouping: true
-			}
-		},
-		series: [{
-			name: 'Dinguses',
-			data: dingusValues,
-			color: '#00A2D1'
-		}, {
-			name: 'Widgets',
-			data: widgetValues,
-			color: '#E40001'
-		}
-	]
-	});
-
-	
-  }
-
-function plotPie(continent){
-	let dingusValues = []
-	let widgetValues = []
-	
-	for (const datum of sales[continent]) {
-		let dingus = datum['Dingus'];
-		let widget = datum['Widget'];
-		dingusValues.push( dingus);
-		widgetValues.push( widget);
-	}
-	var sumd = dingusValues.reduce(function(a, b){
-		return a + b;
-	}, 0);
-	var sumw = widgetValues.reduce(function(a, b){
-		return a + b;
-	}, 0);
-
-	document.getElementById('st1').innerHTML = sumd
-	document.getElementById('st2').innerHTML = sumw
-	document.getElementById('st4').innerHTML = (sumd*DINGUS_PRICE+sumw*WIDGET_PRICE).toFixed(2)
-
-
-	Highcharts.chart('container2', {
-		exporting: { enabled: false },
-		chart: {
-		  plotBackgroundColor: null,
-		  plotBorderWidth: null,
-		  plotShadow: false,
-		  type: 'pie'
-		},
-		title: {
-		  text: 'Total Sales'
-		},
-		tooltip: {
-				formatter: function(){
-					var ans = this.point.y
-					return ans
-				}
-			  
-		},
-		legend: {
-			layout: 'vertical',
-			align: 'right',
-			verticalAlign: 'top',
-			x: -40,
-			y: 0,
-			floating: true,
-			borderWidth: 1,
-			backgroundColor:
-	   Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
-	  shadow: true,
-	 },
-	
-		plotOptions: {
-		  pie: {
-			showInLegend: true,
-			allowPointSelect: true,
-			cursor: 'pointer',
-			colors: [
-				 '#00A2D1', 
-				 '#E40001'
-				  ],
-				  dataLabels: {
-				 enabled: true,
-				 format: '<br>{point.percentage:.1f} %',
-				 distance: -50,
-				 filter: {
-				   property: 'percentage',
-				   operator: '>',
-				   value: 4}}
-			 ,
-			point: {
-			  events: {
-				click: function(oEvent) {
-				  callExternalFunction(oEvent.point.name);
-				}
-			  }
-			}
-		  }
-		},
-		series: [{
-		  name: 'Brands',
-		  colorByPoint: true,
-		  data: [{
-			name: 'Dingus',
-			y: sumd
-		  }, {
-			name: 'Widget',
-			y: sumw,
-			sliced: true,
-			selected: true
-		  }]
-		}]
-	  });
-	  
-	  function callExternalFunction(obj){
-	  console.log(obj);
-	  }
-	  
-
-}
-
-
-//New program starts here
-
-
-
-
-
-var dict = {'0':'ALL','1':'APPL','2':'MSFT','3':'GOOG','4':'AMZN','5':'TSLA'};
-var dates = []
-var prices = []
-var stocks = []
-var request = new XMLHttpRequest();
-request.open("GET", "stocks.json", false);
-request.send(null)
-var my_JSON_object = JSON.parse(request.responseText);
-my_JSON_object.forEach(element => dates.push(element['Date']));
-my_JSON_object.forEach(element => prices.push(element['Adj Close']));
-my_JSON_object.forEach(element => stocks.push(element['Stock']));
-var jj = []
-
-for (let i=0;i<dates.length;i++){
-	var zz = [dates[i],prices[i],stocks[i]]
-	jj.push(zz)
-}
-
-stock_1 = []
-for (let i=0;i<jj.length;i++){
-	if(jj[i][2]==1){
-		var zz = [jj[i][0],jj[i][1]]
-		stock_1.push(zz)
-	}
-}
-
-stock_2 = []
-for (let i=0;i<jj.length;i++){
-	if(jj[i][2]==2){
-		var zz = [jj[i][0],jj[i][1]]
-		stock_2.push(zz)
-	}
-}
-
-stock_3 = []
-for (let i=0;i<jj.length;i++){
-	if(jj[i][2]==3){
-		var zz = [jj[i][0],jj[i][1]]
-		stock_3.push(zz)
-	}
-}
-
-stock_4 = []
-for (let i=0;i<jj.length;i++){
-	if(jj[i][2]==4){
-		var zz = [jj[i][0],jj[i][1]]
-		stock_4.push(zz)
-	}
-}
-
-stock_5 = []
-for (let i=0;i<jj.length;i++){
-	if(jj[i][2]==5){
-		var zz = [jj[i][0],jj[i][1]]
-		stock_5.push(zz)
-	}
-}
-
-all_data = [stock_1,stock_2,stock_3,stock_4,stock_5]
-
-
-
+//Plot line
 document.addEventListener('DOMContentLoaded', function () {
-
-
-  
+	//ran = getRandomSubarray(stocks, 1)[0]
+	ran = stocks[0]
 	  Highcharts.chart('container3', {
 		exporting: { enabled: false },
 		chart: {
 		  zoomType: 'x'
 		},
 		title: {
-		  text: 'Dynamic Growth'
+		  text: 'Dynamic Growth for ' + ran
 		},
 		subtitle: {
-		  text: 'Stock Prices of all from Present-'
+		  text: 'Actual Stock Prices vs Predicted Stock Prices'
 		},
 		xAxis: {
-		  type: 'datetime',
-		  labels: {
-			formatter: function() {
-				dd = new Date(this.value)
-				return (dd.getMonth()+1) + '/' + dd.getDate() + '/' + (dd.getYear()-100)
-			}
-		  },
-		  title: {
-			text: 'Date'
-		  },
-		  minPadding:0,
-		  maxPadding:0,
-		  startOnTick:false,
-		  endOnTick:false
+			categories: container[ran][0],
+			title: {
+				text: 'Date'
+			  },
+		
 		},
 		tooltip: {
 			formatter: function(){
@@ -435,7 +243,6 @@ document.addEventListener('DOMContentLoaded', function () {
 			crosshairs: [true,true]
 		  },
 		yAxis: {
-			max:160,
 			lineWidth: 1,
 			tickInterval: 20,
 		  title: {
@@ -483,22 +290,12 @@ document.addEventListener('DOMContentLoaded', function () {
   
 		series: [
 			{
-				name: 'AAPL',
-				data: stock_1,
+				name: 'Actual',
+				data: container[ran][1],
 			}, {
-				name: 'MSFT',
-				data: stock_2,
+				name: 'Predicted',
+				data: container[ran][2],
 			},
-			{
-				name: 'GOOG',
-				data: stock_3,
-			}, {
-				name: 'AMZN',
-				data: stock_4,
-			},{
-				name: 'TSLA',
-				data: stock_5,
-			}
 		]
 	  });
 	}
@@ -506,39 +303,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
   function leaveChange() {
-	var stock_index = document.getElementById("leave").value
-
-	if(stock_index==0){
-		temp = [
-			{
-				name: 'AAPL',
-				data: stock_1,
-			}, {
-				name: 'MSFT',
-				data: stock_2,
-			},
-			{
-				name: 'GOOG',
-				data: stock_3,
-			}, {
-				name: 'AMZN',
-				data: stock_4,
-			},{
-				name: 'TSLA',
-				data: stock_5,
-			}
-		]
-	}
-	else{
-		temp = [
-			{
-				name: dict[stock_index],
-				data: all_data[stock_index-1],
-			}
-		]
-	}
-
-
+	var stock = document.getElementById("leave").value
 	 
 	Highcharts.chart('container3', {
 		exporting: { enabled: false },
@@ -549,24 +314,15 @@ document.addEventListener('DOMContentLoaded', function () {
 		  text: 'Dynamic Growth'
 		},
 		subtitle: {
-		  text: 'Stock Prices Predictions of ' + dict[stock_index]
+		  text: 'Stock Prices Predictions of ' + stock
 		},
 		xAxis: {
-		  type: 'datetime',
-		  labels: {
-			formatter: function() {
-				dd = new Date(this.value)
-				return (dd.getMonth()+1) + '/' + dd.getDate() + '/' + (dd.getYear()-100)
-			}
-		  },
+				categories: container[stock][0]
+			,
 		  title: {
 			text: 'Date'
 		  },
-		  minPadding:0,
-		  maxPadding:0,
-		  startOnTick:false,
-		  endOnTick:false,
-		  
+
 		},
 		tooltip: {
 			formatter: function(){
@@ -576,7 +332,6 @@ document.addEventListener('DOMContentLoaded', function () {
 			crosshairs: [true,true]
 		  },
 		yAxis: {
-			max:160,
 			lineWidth: 1,
 			tickInterval: 20,
 		  title: {
@@ -622,6 +377,15 @@ document.addEventListener('DOMContentLoaded', function () {
 		  }
 		},
   
-		series: temp
+		series: 
+		[
+			{
+				name: 'Actual',
+				data: container[stock][1],
+			}, {
+				name: 'Predicted',
+				data: container[stock][2],
+			},
+		]
 	  });
 	}
